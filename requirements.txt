@@ -1,0 +1,5 @@
+django
+djangorestframework
+django-storages
+python-decouple
+boto3
