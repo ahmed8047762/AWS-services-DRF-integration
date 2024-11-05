@@ -30,15 +30,16 @@
                     <form id="blog-form" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="title" required>
+                            <input type="text" class="form-control" id="title" name="title" required>
                         </div>
                         <div class="mb-3">
                             <label for="content" class="form-label">Content</label>
-                            <textarea class="form-control" id="content" rows="3" required></textarea>
+                            <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="media" class="form-label">Media</label>
-                            <input type="file" class="form-control" id="media" accept="image/*,video/*">
+                            <input type="file" class="form-control" id="media" name="media" accept="image/*,video/*">
+                            <div id="media-preview" class="mt-2"></div>
                         </div>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
@@ -47,8 +48,24 @@
         </div>
     </div>
 
+    <!-- Blog Detail Modal -->
+    <div class="modal fade" id="blogDetailModal" tabindex="-1" aria-labelledby="blogDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blogDetailModalLabel">Blog Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 id="detail-title"></h5>
+                    <p id="detail-content"></p>
+                    <div id="detail-media"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
-        const apiUrl = '/api/posts/';  // Replace with your actual ngrok URL
+        const apiUrl = '/api/posts/';
 
         // Fetch and display blogs
         function fetchBlogs() {
@@ -63,12 +80,13 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <span>${blog.title}</span>
                                 <div>
+                                    <button class="btn btn-sm btn-info view-btn" data-id="${blog.id}">View</button>
                                     <button class="btn btn-sm btn-success edit-btn" data-id="${blog.id}">Update</button>
                                     <button class="btn btn-sm btn-danger delete-btn" data-id="${blog.id}">Delete</button>
                                 </div>
                             </li>
                         `);
-                    });
+                    });                    
                 }
             });
         }
@@ -89,6 +107,11 @@
                 formData.append('media', mediaFile);
             }
 
+            // Debug log - check what's in formData
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
             $.ajax({
                 url: url,
                 type: method,
@@ -96,8 +119,10 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    console.log('Success:', response);
+                    console.log('Success response:', response);  // Debug log
                     $('#blogModal').modal('hide');
+                    // Add a slight delay to ensure the modal is fully hidden before fetching
+                    setTimeout(fetchBlogs, 300); 
                     fetchBlogs();
                 },
                 error: function(xhr, status, error) {
@@ -114,6 +139,44 @@
             $('#blogModal').modal('show');
         });
 
+        // In your view-btn click handler:
+        $(document).on('click', '.view-btn', function() {
+            const blogId = $(this).data('id');
+            $.ajax({
+                url: `${apiUrl}${blogId}/`,  // Fix template literal syntax
+                type: 'GET',
+                success: function(blog) {
+                    $('#detail-title').text(blog.title);
+                    $('#detail-content').text(blog.content);
+
+                    // Check if there is media
+                    if (blog.media) {
+                        const mediaUrl = blog.media;
+                        const mediaType = mediaUrl.split('.').pop().toLowerCase();
+
+                        if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(mediaType)) {
+                            $('#detail-media').html(`
+                                <img src="${mediaUrl}" class="img-fluid" alt="Blog Media">
+                            `);  // Fix template literal syntax
+                        } else if (['mp4', 'webm', 'ogg'].includes(mediaType)) {
+                            $('#detail-media').html(`
+                                <video controls class="img-fluid">
+                                    <source src="${mediaUrl}" type="video/${mediaType}">
+                                    Your browser does not support the video tag.
+                                </video>
+                            `);  // Fix template literal syntax
+                        }
+                    } else {
+                        $('#detail-media').html('');
+                    }
+
+                    $('#blogDetailModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', xhr.responseText);
+                }
+            });
+        });
         // Open update modal
         $(document).on('click', '.edit-btn', function() {
             const blogId = $(this).data('id');
@@ -125,6 +188,29 @@
                     $('#content').val(blog.content);
                     $('#blog-form').data('id', blog.id);
                     $('#blogModalLabel').text('Update Blog');
+
+                    // Display the existing media if present
+                    if (blog.media) {
+                        const mediaUrl = blog.media;  // Backend now provides full URL
+                        const mediaType = mediaUrl.split('.').pop().toLowerCase();
+
+                        if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(mediaType)) {
+                            $('#media-preview').html(`
+                                <img src="${mediaUrl}" class="img-fluid" alt="Current Media">
+                            `);
+                        } else if (['mp4', 'webm', 'ogg'].includes(mediaType)) {
+                            $('#media-preview').html(`
+                                <video controls class="img-fluid">
+                                    <source src="${mediaUrl}" type="video/${mediaType}">
+                                    Your browser does not support the video tag.
+                                </video>
+                            `);
+                        } else {
+                            $('#media-preview').html(''); // In case no media
+                        }
+                    } else {
+                        $('#media-preview').html(''); // If no media, clear preview
+                    }
                     $('#blogModal').modal('show');
                 }
             });

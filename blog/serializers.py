@@ -1,19 +1,16 @@
 from rest_framework import serializers
 from .models import Post
-import base64
-from django.core.files.base import ContentFile
-import uuid
+from django.conf import settings
 
 class PostSerializer(serializers.ModelSerializer):
-    media_data = serializers.CharField(write_only=True, required=False)  # For receiving base64 data
-    
     class Meta:
         model = Post
-        fields = ['id', 'title', 'content', 'created_at', 'updated_at', 'media', 'media_data']
-        read_only_fields = ['media']  # media field will be set programmatically
-    
-    def validate_media(self, value):
-        if value and not isinstance(value, str):
-            if not hasattr(value, 'content_type'):
-                raise serializers.ValidationError("Invalid media format")
-        return value
+        fields = ['id', 'title', 'content', 'created_at', 'updated_at', 'media']
+        read_only_fields = ['created_at', 'updated_at']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if instance.media and hasattr(instance.media, 'url'):
+            # Use the AWS S3 URL directly
+            data['media'] = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{str(instance.media)}"
+        return data

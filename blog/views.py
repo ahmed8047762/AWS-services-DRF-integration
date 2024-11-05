@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Post
 from .serializers import PostSerializer
+from django.conf import settings
 from .utils import upload_file_s3  # Import the S3 upload function
 
 from django.shortcuts import render
@@ -15,50 +16,47 @@ def index(request):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    parser_classes = (MultiPartParser, FormParser, JSONParser)  # Accept both multipart and JSON
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
 
     def create(self, request, *args, **kwargs):
-        media = request.FILES.get('media')
-        data = request.data.copy()
+        print("Files in request:", request.FILES)
+        print("Data in request:", request.data)
 
-        if media:
-            try:
-                file_extension = media.name.split('.')[-1]
-                s3_file_name = f'blog_media/{data.get("title")}.{file_extension}'
-                media_url = upload_file_s3(media, s3_file_name)
-                data['media'] = media_url
-            except Exception as e:
-                return Response(
-                    {'error': f'Error uploading to S3: {str(e)}'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
+        # Create a mutable copy of the data
+        data = request.data.dict() if hasattr(request.data, 'dict') else request.data.copy()
+        
+        # If there's a file in request.FILES, add it to the data
+        if 'media' in request.FILES:
+            data['media'] = request.FILES['media']
+        
+        # Create serializer with the modified data
         serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        
+        if serializer.is_valid():
+            instance = serializer.save()
+            print("Created instance media:", instance.media)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print("Serializer errors:", serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        data = request.data.copy()
-
-        media = request.FILES.get('media')
-        if media:
-            try:
-                file_extension = media.name.split('.')[-1]
-                s3_file_name = f'blog_media/{data.get("title")}.{file_extension}'
-                media_url = upload_file_s3(media, s3_file_name)
-                data['media'] = media_url
-            except Exception as e:
-                return Response(
-                    {'error': f'Error uploading to S3: {str(e)}'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
+        
+        # Create a mutable copy of the data
+        data = request.data.dict() if hasattr(request.data, 'dict') else request.data.copy()
+        
+        # If there's a file in request.FILES, add it to the data
+        if 'media' in request.FILES:
+            data['media'] = request.FILES['media']
+        
         serializer = self.get_serializer(instance, data=data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return Response(serializer.data)
+        
+        if serializer.is_valid():
+            instance = serializer.save()
+            print("Updated instance media:", instance.media)
+            return Response(serializer.data)
+        else:
+            print("Serializer errors:", serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

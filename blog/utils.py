@@ -31,6 +31,7 @@ def upload_file_s3(file, s3_file_name):
             # ExtraArgs={'ACL': 'public-read'}
         )
         file_url = f"https://{bucket_name}.s3.amazonaws.com/{s3_file_name}"
+        print("File URL:", file_url)
         return file_url
     except Exception as e:
         logger.error(f"Failed to upload file to S3: {str(e)}")
