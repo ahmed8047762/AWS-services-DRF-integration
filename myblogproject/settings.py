@@ -27,11 +27,7 @@ SECRET_KEY = 'django-insecure-3v52v-3&%287-!ln-=#(y6zgh-#@%t#zvx121ng39vzg59t4yv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    '648b-39-34-43-176.ngrok-free.app',  # Add your ngrok URL here
-]
+ALLOWED_HOSTS = ["*"]
 
 # AWS S3
 AWS_S3_ACCESS_KEY_ID = config("AWS_S3_ACCESS_KEY_ID")
