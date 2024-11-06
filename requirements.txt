@@ -6,3 +6,5 @@ boto3
 django-cors-headers
 django-sslserver
 django-extensions
+Werkzeug
+pyOpenSSL
