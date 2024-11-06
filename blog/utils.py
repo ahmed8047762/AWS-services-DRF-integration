@@ -28,7 +28,7 @@ def upload_file_s3(file, s3_file_name):
             file,
             bucket_name,
             s3_file_name,
-            # ExtraArgs={'ACL': 'public-read'}
+            ExtraArgs={'ACL': 'public-read'}
         )
         file_url = f"https://{bucket_name}.s3.amazonaws.com/{s3_file_name}"
         print("File URL:", file_url)
