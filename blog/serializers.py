@@ -12,5 +12,5 @@ class PostSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         if instance.media and hasattr(instance.media, 'url'):
             # Use the AWS S3 URL directly
-            data['media'] = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{str(instance.media)}"
+            data['media'] = f"http://{settings.AWS_S3_CUSTOM_DOMAIN}/{str(instance.media)}"
         return data

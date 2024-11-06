@@ -118,6 +118,10 @@
                 data: formData,
                 processData: false,
                 contentType: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 success: function(response) {
                     console.log('Success response:', response);  // Debug log
                     $('#blogModal').modal('hide');
