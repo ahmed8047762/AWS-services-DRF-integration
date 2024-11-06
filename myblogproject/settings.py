@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'blog',
     'storages',
     'corsheaders',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

@@ -4,3 +4,5 @@ django-storages
 python-decouple
 boto3
 django-cors-headers
+django-sslserver
+django-extensions
