@@ -27,7 +27,7 @@ class PostViewSet(viewsets.ModelViewSet):
         
         # If there's a file in request.FILES, add it to the data
         if 'media' in request.FILES:
-            data['media'] = request.FILES['media']
+            data['media'] = request.FILES["media"]
         
         # Create serializer with the modified data
         serializer = self.get_serializer(data=data)
