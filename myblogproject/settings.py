@@ -87,6 +87,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "https://ahmedwarraich.duckdns.org",
+]
+
 ROOT_URLCONF = 'myblogproject.urls'
 
 TEMPLATES = [
