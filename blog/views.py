@@ -9,6 +9,10 @@ from .utils import upload_file_s3  # Import the S3 upload function
 
 from django.shortcuts import render
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def index(request):
     return render(request, 'index.html')
 
@@ -19,8 +23,9 @@ class PostViewSet(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
 
     def create(self, request, *args, **kwargs):
-        print("Files in request:", request.FILES)
-        print("Data in request:", request.data)
+        logger.info("Received request for new post creation")
+        logger.debug(f"Files in request: {request.FILES}")
+        logger.debug(f"Data in request: {request.data}")
 
         # Create a mutable copy of the data
         data = request.data.dict() if hasattr(request.data, 'dict') else request.data.copy()
@@ -34,10 +39,10 @@ class PostViewSet(viewsets.ModelViewSet):
         
         if serializer.is_valid():
             instance = serializer.save()
-            print("Created instance media:", instance.media)
+            logger.info(f"Post created successfully with media: {instance.media}")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            print("Serializer errors:", serializer.errors)
+            logger.error(f"Serializer errors: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
@@ -55,8 +60,8 @@ class PostViewSet(viewsets.ModelViewSet):
         
         if serializer.is_valid():
             instance = serializer.save()
-            print("Updated instance media:", instance.media)
+            logger.info(f"Post updated successfully with media: {instance.media}")
             return Response(serializer.data)
         else:
-            print("Serializer errors:", serializer.errors)
+            logger.error(f"Serializer errors: {serializer.errors}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

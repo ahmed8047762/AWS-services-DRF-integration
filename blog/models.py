@@ -1,4 +1,7 @@
 from django.db import models
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
@@ -11,6 +14,6 @@ class Post(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        print("Saving Post with media:", self.media)
+        logger.debug(f"Saving Post with media: {self.media}")
         super().save(*args, **kwargs)
-        print("Saved Post, media is now:", self.media)
+        logger.debug(f"Saved Post, media is now: {self.media}")
