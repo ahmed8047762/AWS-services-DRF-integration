@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'storages',
     'corsheaders',
     'django_extensions',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -85,10 +86,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "https://ahmedwarraich.duckdns.org",
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1',        # Local loopback for development
+    '0.0.0.0',          # Allow any interface, useful in remote setups
+    '54.226.63.25',     # Your EC2 public IP
 ]
 
 ROOT_URLCONF = 'myblogproject.urls'

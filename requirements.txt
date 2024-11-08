@@ -8,3 +8,4 @@ django-sslserver
 django-extensions
 Werkzeug
 pyOpenSSL
+django-debug-toolbar
