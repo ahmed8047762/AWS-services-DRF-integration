@@ -9,3 +9,4 @@ django-extensions
 Werkzeug
 pyOpenSSL
 django-debug-toolbar
+psycopg2-binary
