@@ -5,17 +5,11 @@ from rest_framework import status
 from .models import Post
 from .serializers import PostSerializer
 from django.conf import settings
-from .utils import upload_file_s3  # Import the S3 upload function
-
-from django.shortcuts import render
+from .utils import upload_file_s3
 
 import logging
 
 logger = logging.getLogger(__name__)
-
-def index(request):
-    return render(request, 'index.html')
-
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
