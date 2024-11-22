@@ -1,6 +1,6 @@
 # My Blog Project
 
-A modern blog application built with Django Rest Framework (DRF) backend and React frontend. The application uses PostgreSQL for database management and AWS S3 for media file storage.
+A full-stack blog application integrating Django Rest Framework with React, featuring AWS S3 media storage and PostgreSQL database for efficient content management and media handling.
 
 ## Tech Stack
 
