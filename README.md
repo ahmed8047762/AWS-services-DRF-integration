@@ -31,7 +31,7 @@ A modern blog application built with Django Rest Framework (DRF) backend and Rea
 Before running this project, make sure you have:
 
 - Python 3.x
-- Node.js and npm
+- npm (Node Package Manager)
 - PostgreSQL
 - AWS Account with S3 bucket configured
 - Git
@@ -69,11 +69,10 @@ npm install
 
 ## Configuration
 
-1. Configure your `.env` file with necessary credentials:
-   - AWS S3 credentials
-   - Database settings
-   - Django secret key
-   - Other environment-specific variables
+1. Configure your `.env` file with necessary AWS S3 credentials:
+   - AWS_S3_ACCESS_KEY_ID
+   - AWS_S3_SECRET_ACCESS_KEY
+   - AWS_STORAGE_BUCKET_NAME
 
 2. Configure AWS S3:
    - Create an S3 bucket
