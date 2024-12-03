@@ -43,13 +43,8 @@ c. Activate the virtual environment:
 ------------------------------
 a. Install Git from https://git-scm.com/download/win if not installed
 b. Clone the repository:
-   git clone [your-repository-url]
+   git clone [https://github.com/ahmed8047762/AWS-services-DRF-integration/tree/sqlite-with-local-media]
    cd myblogproject
-
-c. Create .env file in the project root with these variables (adjust as needed):
-   DEBUG=True
-   SECRET_KEY=your-secret-key
-   DATABASE_URL=postgresql://postgres:1234@localhost:5432/myblogdb
 
 6. Install Python Dependencies
 ----------------------------
