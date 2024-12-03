@@ -14,13 +14,15 @@ c. Verify installation by opening Command Prompt and typing:
 --------------------
 a. Download PostgreSQL 14+ from https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 b. During installation:
-   - Remember the password you set for the postgres user
+   - Set password as '1234' for the postgres user
    - Keep default port (5432)
    - Install all offered components
 c. After installation:
    - Open pgAdmin 4 (installed with PostgreSQL)
    - Create a new database called 'myblogdb'
-   - Default user should be 'postgres' with the password you set during installation
+   - Database user should be 'postgres' with password '1234'
+   - Host should be 'localhost'
+   - Port should be '5432'
 
 3. Install Node.js and npm
 -------------------------
@@ -43,7 +45,7 @@ c. Activate the virtual environment:
 ------------------------------
 a. Install Git from https://git-scm.com/download/win if not installed
 b. Clone the repository:
-   git clone [https://github.com/ahmed8047762/AWS-services-DRF-integration/tree/sqlite-with-local-media]
+   git clone https://github.com/ahmed8047762/AWS-services-DRF-integration/tree/sqlite-with-local-media
    cd myblogproject
 
 6. Install Python Dependencies
