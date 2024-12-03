@@ -1,0 +1,126 @@
+Setup Guide for My Blog Project (Windows 10)
+=======================================
+
+This guide will help you set up and run the blog project on Windows 10. Please follow these steps in order.
+
+1. Install Python
+----------------
+a. Download Python 3.9+ from https://www.python.org/downloads/
+b. During installation, make sure to check "Add Python to PATH"
+c. Verify installation by opening Command Prompt and typing:
+   python --version
+
+2. Install PostgreSQL
+--------------------
+a. Download PostgreSQL 14+ from https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+b. During installation:
+   - Remember the password you set for the postgres user
+   - Keep default port (5432)
+   - Install all offered components
+c. After installation:
+   - Open pgAdmin 4 (installed with PostgreSQL)
+   - Create a new database called 'myblogdb'
+   - Default user should be 'postgres' with the password you set during installation
+
+3. Install Node.js and npm
+-------------------------
+a. Download Node.js LTS version from https://nodejs.org/
+b. During installation, accept all defaults
+c. Verify installation in Command Prompt:
+   node --version
+   npm --version
+
+4. Set Up Python Virtual Environment
+----------------------------------
+a. Open Command Prompt in your desired project directory
+b. Create a new virtual environment:
+   python -m venv venv
+
+c. Activate the virtual environment:
+   venv\Scripts\activate
+
+5. Clone and Set Up the Project
+------------------------------
+a. Install Git from https://git-scm.com/download/win if not installed
+b. Clone the repository:
+   git clone [your-repository-url]
+   cd myblogproject
+
+c. Create .env file in the project root with these variables (adjust as needed):
+   DEBUG=True
+   SECRET_KEY=your-secret-key
+   DATABASE_URL=postgresql://postgres:1234@localhost:5432/myblogdb
+
+6. Install Python Dependencies
+----------------------------
+a. With virtual environment activated:
+   pip install -r requirements.txt
+
+7. Set Up the Database
+---------------------
+a. Run migrations:
+   python manage.py makemigrations
+   python manage.py migrate
+
+b. Create a superuser:
+   python manage.py createsuperuser
+
+8. Set Up Frontend
+-----------------
+a. Navigate to frontend directory:
+   cd frontend
+
+b. Install dependencies:
+   npm install
+
+c. Build the frontend:
+   npm run build
+
+9. Create Required Directories
+----------------------------
+a. Create media directory in project root:
+   mkdir media
+
+10. Running the Project
+----------------------
+a. Start Django development server (from project root):
+   python manage.py runserver
+
+b. For development, start frontend dev server (in separate terminal):
+   cd frontend
+   npm run dev
+
+11. Accessing the Application
+---------------------------
+- Main application: http://localhost:8000
+- Admin interface: http://localhost:8000/admin
+- API endpoints: http://localhost:8000/api/
+- Frontend dev server (if running): http://localhost:5173
+
+Common Issues and Solutions
+-------------------------
+1. Database Connection Error:
+   - Verify PostgreSQL is running (check Services in Windows)
+   - Confirm database name, user, and password in settings.py
+   - Make sure PostgreSQL port (5432) is not blocked
+
+2. Node.js/npm Issues:
+   - Clear npm cache: npm cache clean --force
+   - Delete node_modules and package-lock.json, then run npm install again
+
+3. Python/Django Issues:
+   - Make sure virtual environment is activated
+   - Verify all requirements are installed: pip freeze
+   - Check if migrations are applied: python manage.py showmigrations
+
+4. Media Files Not Showing:
+   - Verify media directory exists
+   - Check permissions on media directory
+   - Ensure DEBUG=True in development
+
+Note: For production deployment, make sure to:
+- Set DEBUG=False
+- Use a proper SECRET_KEY
+- Configure proper security settings
+- Set up proper static file serving
+- Configure proper database credentials

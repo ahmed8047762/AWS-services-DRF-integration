@@ -29,23 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-# AWS S3
-AWS_S3_ACCESS_KEY_ID = config("AWS_S3_ACCESS_KEY_ID")
-AWS_S3_SECRET_ACCESS_KEY = config("AWS_S3_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-AWS_S3_URL_PROTOCOL = 'https'  # or 'http'
-
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-AWS_S3_SIGNATURE_VERSION = 's3v4'
-AWS_S3_REGION_NAME = 'us-east-1'  # Make sure this is set to your actual region
-AWS_DEFAULT_ACL = 'public-read'  # This is important for public access
-AWS_QUERYSTRING_AUTH = False
-AWS_S3_FILE_OVERWRITE = False
-AWS_S3_VERIFY = True  # Add this line
-AWS_S3_ADDRESSING_STYLE = "virtual"  # Add this line
+# Media files configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # For development only
@@ -86,9 +72,6 @@ SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
 # Security settings
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-MEDIA_URL = f'{AWS_S3_URL_PROTOCOL}://{AWS_S3_CUSTOM_DOMAIN}/media/'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_ROOT = 'media/'
 # Application definition
 
 INSTALLED_APPS = [
@@ -100,7 +83,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'blog',
-    'storages',
     'corsheaders',
     'django_extensions',
     'debug_toolbar',
@@ -215,10 +197,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/dist'),  # React build output
 ]
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
