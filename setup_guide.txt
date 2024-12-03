@@ -27,6 +27,7 @@ c. After installation:
 3. Install Node.js and npm
 -------------------------
 a. Download Node.js LTS version from https://nodejs.org/
+   (npm will be automatically installed with Node.js)
 b. During installation, accept all defaults
 c. Verify installation in Command Prompt:
    node --version
@@ -34,26 +35,19 @@ c. Verify installation in Command Prompt:
 
 4. Set Up Python Virtual Environment
 ----------------------------------
-a. Open Command Prompt in your desired project directory
+a. Open Command Prompt in your project directory
 b. Create a new virtual environment:
    python -m venv venv
 
 c. Activate the virtual environment:
    venv\Scripts\activate
 
-5. Clone and Set Up the Project
-------------------------------
-a. Install Git from https://git-scm.com/download/win if not installed
-b. Clone the repository:
-   git clone https://github.com/ahmed8047762/AWS-services-DRF-integration/tree/sqlite-with-local-media
-   cd myblogproject
-
-6. Install Python Dependencies
+5. Install Python Dependencies
 ----------------------------
 a. With virtual environment activated:
    pip install -r requirements.txt
 
-7. Set Up the Database
+6. Set Up the Database
 ---------------------
 a. Run migrations:
    python manage.py makemigrations
@@ -62,7 +56,7 @@ a. Run migrations:
 b. Create a superuser:
    python manage.py createsuperuser
 
-8. Set Up Frontend
+7. Set Up Frontend
 -----------------
 a. Navigate to frontend directory:
    cd frontend
@@ -73,12 +67,7 @@ b. Install dependencies:
 c. Build the frontend:
    npm run build
 
-9. Create Required Directories
-----------------------------
-a. Create media directory in project root:
-   mkdir media
-
-10. Running the Project
+8. Running the Project
 ----------------------
 a. Start Django development server (from project root):
    python manage.py runserver
@@ -87,7 +76,7 @@ b. For development, start frontend dev server (in separate terminal):
    cd frontend
    npm run dev
 
-11. Accessing the Application
+9. Accessing the Application
 ---------------------------
 - Main application: http://localhost:8000
 - Admin interface: http://localhost:8000/admin
@@ -101,7 +90,7 @@ Common Issues and Solutions
    - Confirm database name, user, and password in settings.py
    - Make sure PostgreSQL port (5432) is not blocked
 
-2. Node.js/npm Issues:
+2. npm Issues:
    - Clear npm cache: npm cache clean --force
    - Delete node_modules and package-lock.json, then run npm install again
 
@@ -109,11 +98,6 @@ Common Issues and Solutions
    - Make sure virtual environment is activated
    - Verify all requirements are installed: pip freeze
    - Check if migrations are applied: python manage.py showmigrations
-
-4. Media Files Not Showing:
-   - Verify media directory exists
-   - Check permissions on media directory
-   - Ensure DEBUG=True in development
 
 Note: For production deployment, make sure to:
 - Set DEBUG=False
